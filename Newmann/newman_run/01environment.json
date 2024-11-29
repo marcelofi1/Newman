@@ -1,0 +1,170 @@
+{
+	"id": "94032866-25c0-4b8d-8abd-3d931f287f64",
+	"name": "NewSB-UpdateBalance-PPD",
+	"values": [
+		{
+			"key": "Host",
+			"value": "https://sb-api.qa.pposervices.local/api/auth/realms/qa-sportsbetting/",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "username",
+			"value": "SB1456395",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "password",
+			"value": "Aa123456",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "authRegex",
+			"value": "authenticate\\?session_code=(.+?)&amp;execution=(.+?)&amp;client_id=(.+?)&amp;tab_id=(.+?)\"",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "authResource",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "session_code",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "execution",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "client_id",
+			"value": "sportsbetting-web",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "tab_id",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "redirect_uri",
+			"value": "https%3A%2F%2Fsb.qa.pposervices.local%2F",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "state",
+			"value": "f762a17d-11e1-455e-b16d-9f9e7440e6c5",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "code_challenge",
+			"value": "84tMKiO6rAwqwg3kUU-K8mhqY96tTmmlBy3BolQPInI",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "nonce",
+			"value": "db83b95f-4c45-4325-ade1-101d425241e1",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "response_mode",
+			"value": "fragment",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "response_type",
+			"value": "code",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "scope",
+			"value": "openid",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "code_challenge_method",
+			"value": "S256",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "headers",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "code",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "code_verifier",
+			"value": "PbjIGGPA47YBQi_zzyeqOV8T9ol6FY-jiuqk9LnEgUQxSOY8Encpvybhx8MXJ9W0Ea6tsI1kYqtZ0eoUqWZVwJ9F7Em3-lz5-EQe-GCCjJNdW9np6amuFmQwdPl63KWD",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "CC",
+			"value": "3U4zznUmGDDl51-Xu2epij-6rsP6cf1x5qT6jQGE9Wo",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "tokenRedirectUri",
+			"value": "https://sb.qa.pposervices.local",
+			"enabled": true
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "sessionToken",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "customerApiPublicUri",
+			"value": "https://sb.qa.pposervices.local",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2023-07-03T14:53:23.804Z",
+	"_postman_exported_using": "Postman/10.15.4"
+}

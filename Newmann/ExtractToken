@@ -1,0 +1,484 @@
+{
+	"info": {
+		"_postman_id": "e63885d2-03f4-4ab9-b71e-00415f59f2e7",
+		"name": "Update_balance",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11966304"
+	},
+	"item": [
+		{
+			"name": "Get login form",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const resp = pm.response.text();\r",
+							"var reg = /authenticate\\?session_code=([^.]*)&amp;execution=([^.]*)&amp;client_id=([^.]*)&amp;tab_id=([^.]*)\"\\s/;\r",
+							"\r",
+							"myArray = reg.exec(resp);\r",
+							"\r",
+							"pm.test(\"body contains regex and saves it\", function() {\r",
+							"    pm.expect(myArray.length).to.be.gte(2);\r",
+							"    pm.environment.set('authResource',myArray[0]);\r",
+							"    pm.environment.set('session_code',myArray[1]);\r",
+							"    pm.environment.set('execution',myArray[2]);\r",
+							"    pm.environment.set('client_id',myArray[3]);\r",
+							"    pm.environment.set('tab_id',myArray[4]);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function generateCodeVerifier() {\r",
+							"    var code_verifier = generateRandomString(128);\r",
+							"    return code_verifier;\r",
+							"  }\r",
+							"\r",
+							"function generateRandomString(length) {\r",
+							"    var text = \"\";\r",
+							"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~\";\r",
+							"    for (var i = 0; i < length; i++) {\r",
+							"      text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+							"    }\r",
+							"    return text;\r",
+							"  };\r",
+							"\r",
+							"function generateCodeChallenge(code_verifier) {\r",
+							"    var code_challenge = base64URL(CryptoJS.SHA256(code_verifier));\r",
+							"    return code_challenge;\r",
+							"}\r",
+							"\r",
+							"function base64URL(string) {\r",
+							"    return string.toString(CryptoJS.enc.Base64).replace(/=/g, '').replace(/\\+/g, '-').replace(/\\//g, '_');\r",
+							"}\r",
+							"\r",
+							"var codeVerifier = generateCodeVerifier();\r",
+							"pm.environment.set('code_verifier',codeVerifier);\r",
+							"pm.environment.set('CC',generateCodeChallenge(codeVerifier))\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Host}}/protocol/openid-connect/auth?client_id={{client_id}}&redirect_uri={{redirect_uri}}&state={{state}}&response_mode={{response_mode}}&response_type={{response_type}}&scope={{scope}}&nonce={{nonce}}&code_challenge={{CC}}&code_challenge_method={{code_challenge_method}}",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"protocol",
+						"openid-connect",
+						"auth"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "{{client_id}}"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{redirect_uri}}"
+						},
+						{
+							"key": "state",
+							"value": "{{state}}"
+						},
+						{
+							"key": "response_mode",
+							"value": "{{response_mode}}"
+						},
+						{
+							"key": "response_type",
+							"value": "{{response_type}}"
+						},
+						{
+							"key": "scope",
+							"value": "{{scope}}"
+						},
+						{
+							"key": "nonce",
+							"value": "{{nonce}}"
+						},
+						{
+							"key": "code_challenge",
+							"value": "{{CC}}"
+						},
+						{
+							"key": "code_challenge_method",
+							"value": "{{code_challenge_method}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var resp = pm.response.status;\r",
+							"console.log(resp)\r",
+							"pm.test(\"Status code is 200 or 302\", function () {\r",
+							"        pm.expect(pm.response.code).to.be.oneOf([200, 302]);   \r",
+							"});\r",
+							"\r",
+							"/*pm.test(\"The entered email and password are valid\",() => {\r",
+							"    pm.expect(pm.response.text()).not.to.include(\"The entered email or password are invalid.\")\r",
+							"})*/\r",
+							"\r",
+							"//pm.environment.set('sessionToken', pm.cookies.get('KEYCLOAK_IDENTITY'));\r",
+							"//pm.environment.set('headers', JSON.stringify(pm.response.headers));\r",
+							"\r",
+							"var reg = /&code=(.*)/;\r",
+							"\r",
+							"myArray = reg.exec(resp);\r",
+							"\r",
+							"/*pm.test(\"body contains regex and saves it\", function() {\r",
+							"    pm.expect(myArray.length).to.be.gte(2);\r",
+							"    pm.environment.set('code',myArray[1]);\r",
+							"})*/\r",
+							"\r",
+							"var location = pm.response.headers.get('Location');\r",
+							"const url = require('url');\r",
+							"location = location.replace('#', '?');\r",
+							"const query = url.parse(location, true).query;\r",
+							"const code = query.code + '';\r",
+							"\r",
+							"pm.environment.set('code',code);\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"followRedirects": false
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "ioBlackbox",
+							"value": "0400R9HVeoYv1gsNf94lis1ztgVCzzvTD2YtrcE0jK9cVvPBEoeHzBE+B6Q9DuDQhWgK2GT6eu1P1IIsc0SaylqLjIIJrJ4l93A3NT74Fr5/BgFtHo7Y4LZ2tGjk/+a/Y2DxuTfp/5Fnk7JR88fYgBRoqHYpPgQiEVyi6EP5YEYwjHSodXyUKxUgVtZ++LaXDquIRV8flS7U9roAFmdwtVN3mJNqepCRLFCBShzemood3yoKOVTTL2g136yNzGkmK4M7ISKiq4yvoHcgBVMDdOYV83MnEYUvBMAKTEVdGJlxBwCc8acbcKqAuWf7gouzBPJaEMCy0s3hRLlX3uHnT/mMqxLKep0gAiQm9e95/YPov8FdRHCYsslJLKDl1FsZY8jwYa/hFBBVErqVT31SgfbGSQPc1OmFfRgCJ/rfLp/lb8xz3o6TlJJED8BNd/D2KVd9Ib4eR9ihhbxbhk4zP7y6JF+rdsbATajACCYhE210JJtoxqmUnxQDVArloJfuFn+Ry7xtL9D1a5cHYYNdyOmCGb2SVUU7DsShjNXsgMEghG2Cob0pn7w0f/PoP5g1QwsR7JU7p3vE+OYM2WWpJPk+5w+qofWwlQMvYTtUNo5lYHz3WmfvVlSAmdQY6r8abItRlS0jkj86Lg8mlBgAVSsOV9IpG/94dXdCJuhcu7D0ubqDlP5UV4Dzo/Xvef2D6L/BllxIb+Hf0VR03KYhOcRC5SUvcM7ACXSGXOp4yYEIf+KcUmNQ3VaRH3E7ZEPXvPf/Xv+9vIRlfaVLh7h/QYTtLXhkSark47KQq4HnEqNOos1c6njJgQh/4vXJiqy0MXMQOThNipDmXv9I185O+yC2f3lLEO0Tay66NZEyiLNePemJKSIdwO9O5ZtntuUkG6NTb1BDxIHSS9RfXuzZpe6BzhpFSmv7cY/k5mNV6QxgbclhfIUcFuybLLNvS9LBZED55Ix5aAKTQzySBBWhu07LmRdt5U4CpewIj2qku3ZkvzkAM9dbBROeNQfbQD1p+KEcV6i8/tb5alAK/XRNo3H5dCCofHI9aHmKtQSFF6p1dE9KlQKhcd4Wg+kwV5FBXAps/oab5cttHkkA5Pfek27Q7Y96Od3brVuX/e87IHozw86WyW27xai7OzDlsrpKLPDUyCAw/48e3mkpDGfldQ+3ZOdVvu4eBdAZaCa1SOdQRfflrB7Zlo+XqueRU0mQTUFrFFAN6Q1x80UdCdGdyqwwbTKdeSg4P+ujHRH29E2Pl68vN0XpeFtRxxRQDekNcfNFHQnRncqsMG0ynXkoOD/rox0R9vRNj5evLzdF6XhbUccUUA3pDXHzRR0J0Z3KrDBtdh49pTzw7czYXo3BTCX2hmV61sych5SywlrciV1uAFm8MqUu7fIab6ZNlJnKnwkOcD6T1dGUjL98u+KZ5osrWl5CiGnQsSvhIA9SpWbF2M3/H/MBg7GJCQGQvdTv1u5H4aaEs1/MrvHjK9GFecOQi+P7/cktkRWD96JNn+fHWHW5Ueuo65JtZydl4idrPIMa2pBw7n/Zr2c1wt/WtgxaEsrKB+CSvojDnmT7U/R4a/9kjC9ielqSSBPrJjjalKApR+Uiu3DbiEQtvUjDM3B/OqNtJ7BnaXEd+WYnWA7bVm4=",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{Host}}/login-actions/authenticate?tab_id={{tab_id}}&client_id={{client_id}}&execution={{execution}}&session_code={{session_code}}",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"login-actions",
+						"authenticate"
+					],
+					"query": [
+						{
+							"key": "g-recaptcha-response",
+							"value": "nosoyrobot",
+							"disabled": true
+						},
+						{
+							"key": "gsetting",
+							"value": "nbolsite",
+							"disabled": true
+						},
+						{
+							"key": "tab_id",
+							"value": "{{tab_id}}"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id}}"
+						},
+						{
+							"key": "execution",
+							"value": "{{execution}}"
+						},
+						{
+							"key": "session_code",
+							"value": "{{session_code}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set('accessToken',pm.response.json()['access_token']);\r",
+							"pm.environment.set('refreshToken',pm.response.json()['refresh_token']);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "code",
+							"value": "{{code}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code",
+							"description": "authorization_code or refresh_token",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "{{client_id}}",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{tokenRedirectUri}}",
+							"type": "text"
+						},
+						{
+							"key": "code_verifier",
+							"value": "{{code_verifier}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{Host}}/protocol/openid-connect/token",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-balance",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-length": true,
+					"user-agent": true,
+					"accept": true,
+					"accept-encoding": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*",
+						"disabled": true
+					},
+					{
+						"key": "Accept-Language",
+						"value": "es-ES,es;q=0.9,en;q=0.8",
+						"disabled": true
+					},
+					{
+						"key": "Access-Control-Allow-Headers",
+						"value": "Content-Type",
+						"disabled": true
+					},
+					{
+						"key": "Access-Control-Allow-Methods",
+						"value": "GET, POST",
+						"disabled": true
+					},
+					{
+						"key": "Access-Control-Allow-Origin",
+						"value": "https://sb-api.qa.pposervices.local/api/customer/update-balance",
+						"disabled": true
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{accessToken}}"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive",
+						"disabled": true
+					},
+					{
+						"key": "Content-Length",
+						"value": "0",
+						"disabled": true
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"disabled": true
+					},
+					{
+						"key": "Origin",
+						"value": "https://sb.qa.pposervices.local/",
+						"disabled": true
+					},
+					{
+						"key": "Referer",
+						"value": "https://sb.qa.pposervices.local/",
+						"disabled": true
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "empty",
+						"disabled": true
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "cors",
+						"disabled": true
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-site",
+						"disabled": true
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36",
+						"disabled": true
+					},
+					{
+						"key": "actual-time",
+						"value": "1656435749267",
+						"disabled": true
+					},
+					{
+						"key": "contests",
+						"value": "na",
+						"disabled": true
+					},
+					{
+						"key": "gmt-offset",
+						"value": "-3",
+						"disabled": true
+					},
+					{
+						"key": "gsetting",
+						"value": "sbnasite"
+					},
+					{
+						"key": "iso-time",
+						"value": "2022-06-28T17:02:29.267Z",
+						"disabled": true
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"",
+						"disabled": true
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0",
+						"disabled": true
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\"",
+						"disabled": true
+					},
+					{
+						"key": "utc-offset",
+						"value": "180",
+						"disabled": true
+					},
+					{
+						"key": "utc-time",
+						"value": "Tue, 28 Jun 2022 17:02:29 GMT",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://ppdapi.sportsbetting.ag/api/customer/update-balance",
+					"protocol": "https",
+					"host": [
+						"ppdapi",
+						"sportsbetting",
+						"ag"
+					],
+					"path": [
+						"api",
+						"customer",
+						"update-balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Host}}/protocol/openid-connect/logout",
+					"host": [
+						"{{Host}}"
+					],
+					"path": [
+						"protocol",
+						"openid-connect",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

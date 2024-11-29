@@ -1,0 +1,24 @@
+{
+  "name": "bonuswallet_testcafe",
+  "version": "1.0.0",
+  "description": "Bonus Wallet project using testcafe framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Victor Gonzalez",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "@request/qs": "^0.1.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.0.3",
+    "keycloak-connect": "^20.0.5",
+    "library-jira": "^1.4.2",
+    "mssql": "^9.1.1",
+    "newman": "^5.3.2",
+    "testcafe": "^2.2.0"
+  }
+}

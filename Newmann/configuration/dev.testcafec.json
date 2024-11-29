@@ -1,0 +1,38 @@
+{
+  "screenshots": {
+    "takeOnFails": true
+  },
+  "userVariables": {
+    "envName": "DEV",
+    "plURL": "https://plcrm.dev.pposervices.local/",
+    "igURL": "https://igcrm.dev.pposervices.local/",
+    "synergyURL": "https://synergy-api.dev.pposervices.local/v1/api/Synergy/",
+    "nucleusURL": "https://nucleus-api.dev.pposervices.local",
+    "betsoftURL": "https://betsoft-api.dev.pposervices.local",
+    "bocatoEnv": "https://bonus-wallet-services.dev.pposervices.local/notifications",
+    "walletBalancesURL": "https://bonus-wallet-balances.dev.pposervices.local/",    
+    "wildCasinoURL": "https://wc.dev.pposervices.local/",
+    "panboURL": "https://panbo.dev.pposervices.local/",
+    "wcCustomerCreation": "https://wc-api.dev.pposervices.local/api/customer/join/sign-up",    
+    "wcTokenHost": "https://wc-api.dev.pposervices.local/api/auth/realms/dev-wildcasino/",
+    "wcKCRoot": "https://wc-api.dev.pposervices.local/api",
+    "wcKCRealms": "dev-wildcasino",
+    "wcClientID": "wildcasino-web",
+    "sportsBettingURL": "https://sb.qa.pposervices.local/",
+    "sbClientID": "sportsbetting-web",
+    "sbKCRealms": "qa-sportsbetting",
+    "sbTokenHost": "https://sb-api.qa.pposervices.local/api/auth/realms/qa-sportsbetting/",
+    "sbCustomerCreation": "https://sb-api.qa.pposervices.local/api/customer/join/sign-up",
+    "gamintURL": "https://gaming-integrations.dev.pposervices.local/gamint/",
+    "wcAPI": "https://wc-api.dev.pposervices.local/",
+    "user": "automation",
+    "userID": "7206",
+    "customerSB": "SB1456395",
+    "customerWC": "W352542",
+    "gamintBearer": {
+      "purerng": "sadljhk12jh3k12h3k1l2",
+      "gamingToken": "sadljhk12jh3k12h3k1l2"
+    }
+  },
+  "selectorTimeout": 120000
+}
